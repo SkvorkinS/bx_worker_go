@@ -1,4 +1,4 @@
-package bitrixWorkers
+package github.com/SkvorkinS/bx_worker_g
 
 import (
 	"bytes"
