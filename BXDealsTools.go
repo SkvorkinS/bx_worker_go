@@ -1,4 +1,4 @@
-package github.com/SkvorkinS/bx_worker_g
+package bx_worker_go
 
 import (
 	"bytes"
