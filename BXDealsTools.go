@@ -63,7 +63,7 @@ func (b Bitrix) CrmDealList(filter map[string]interface{}, fields []string) (map
 func (b Bitrix) CrmDealUpdate(id string, fields map[string]interface{}) (map[string]interface{}, error) {
 	data := map[string]interface{}{
 		"ID":     id,
-		"fields": fields,
+		"FIELDS": fields,
 		"params": map[string]string{
 			"REGISTER_SONET_EVENT": "N",
 		},
