@@ -54,7 +54,6 @@ func (b bitrix) crmDealList(filter map[string]interface{}, fields []string) (map
 	var result map[string]interface{}
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		fmt.Println("Error:", err)
 		return nil, err
 	}
 
