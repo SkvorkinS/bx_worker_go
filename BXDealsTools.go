@@ -8,11 +8,11 @@ import (
 	"net/http"
 )
 
-type bitrix struct {
-	webhook string
+type Bitrix struct {
+	Webhook string
 }
 
-func (b bitrix) crmdealList(filter map[string]interface{}, fields []string) (map[string]interface{}, error) {
+func (b Bitrix) CrmDealList(filter map[string]interface{}, fields []string) (map[string]interface{}, error) {
 	// Создаем объект с данными, которые хотим отправить
 	data := map[string]interface{}{
 		"filter": filter,
@@ -25,7 +25,7 @@ func (b bitrix) crmdealList(filter map[string]interface{}, fields []string) (map
 		return nil, err
 	}
 
-	url := fmt.Sprintf("%v/crm.deal.list", b.webhook)
+	url := fmt.Sprintf("%v/crm.deal.list", b.Webhook)
 
 	// Создаем новый HTTP-запрос
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
@@ -60,7 +60,7 @@ func (b bitrix) crmdealList(filter map[string]interface{}, fields []string) (map
 	return result, nil
 }
 
-func (b bitrix) crmDealUpdate(id string, fields map[string]interface{}) (map[string]interface{}, error) {
+func (b Bitrix) CrmDealUpdate(id string, fields map[string]interface{}) (map[string]interface{}, error) {
 	data := map[string]interface{}{
 		"ID":     id,
 		"fields": fields,
@@ -75,7 +75,7 @@ func (b bitrix) crmDealUpdate(id string, fields map[string]interface{}) (map[str
 	}
 
 	// Замените URL на ваш URL-адрес сервера
-	url := fmt.Sprintf("%v/crm.deal.update", b.webhook)
+	url := fmt.Sprintf("%v/crm.deal.update", b.Webhook)
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
 	if err != nil {
@@ -99,9 +99,9 @@ func (b bitrix) crmDealUpdate(id string, fields map[string]interface{}) (map[str
 	return result, nil
 }
 
-func (b bitrix) crmDealAdd(fields map[string]interface{}) (map[string]interface{}, error) {
+func (b Bitrix) CrmDealAdd(fields map[string]interface{}) (map[string]interface{}, error) {
 
-	url := fmt.Sprintf("%s/crm.deal.add.json", b.webhook)
+	url := fmt.Sprintf("%s/crm.deal.add.json", b.Webhook)
 
 	// Данные для запроса
 
