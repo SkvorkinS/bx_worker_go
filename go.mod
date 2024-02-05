@@ -3,8 +3,6 @@ module github.com/SkvorkinS/bx_worker_go
 go 1.21.6
 
 require (
-	github.com/schollz/progressbar/v3 v3.14.1
-	github.com/sirupsen/logrus v1.9.3
 )
 
 require (
