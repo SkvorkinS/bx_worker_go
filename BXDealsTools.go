@@ -12,7 +12,7 @@ type bitrix struct {
 	webhook string
 }
 
-func (b bitrix) crmDealList(filter map[string]interface{}, fields []string) (map[string]interface{}, error) {
+func (b bitrix) crmdealList(filter map[string]interface{}, fields []string) (map[string]interface{}, error) {
 	// Создаем объект с данными, которые хотим отправить
 	data := map[string]interface{}{
 		"filter": filter,
