@@ -3,16 +3,17 @@ package bx_worker_go
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 )
 
-type Bitrix struct {
+type Shmitrix struct {
 	Webhook string
 }
 
-func (b Bitrix) CrmDealList(filter map[string]interface{}, fields []string) (map[string]interface{}, error) {
+func (b Shmitrix) CrmDealList(filter map[string]interface{}, fields []string) (map[string]interface{}, error) {
 	// Создаем объект с данными, которые хотим отправить
 	data := map[string]interface{}{
 		"filter": filter,
@@ -60,7 +61,7 @@ func (b Bitrix) CrmDealList(filter map[string]interface{}, fields []string) (map
 	return result, nil
 }
 
-func (b Bitrix) CrmDealUpdate(id string, fields map[string]interface{}) (map[string]interface{}, error) {
+func (b Shmitrix) CrmDealUpdate(id string, fields map[string]interface{}) (map[string]interface{}, error) {
 	data := map[string]interface{}{
 		"ID":     id,
 		"FIELDS": fields,
@@ -99,12 +100,10 @@ func (b Bitrix) CrmDealUpdate(id string, fields map[string]interface{}) (map[str
 	return result, nil
 }
 
-func (b Bitrix) CrmDealAdd(fields map[string]interface{}) (map[string]interface{}, error) {
-
+func (b Shmitrix) CrmDealAdd(fields map[string]interface{}) (map[string]interface{}, error) {
 	url := fmt.Sprintf("%s/crm.deal.add.json", b.Webhook)
 
 	// Данные для запроса
-
 	data := map[string]interface{}{
 		"FIELDS": fields,
 		"params": map[string]string{
@@ -130,6 +129,17 @@ func (b Bitrix) CrmDealAdd(fields map[string]interface{}) (map[string]interface{
 	// Отправка запроса
 	client := &http.Client{}
 	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// Проверка, что тело ответа не nil
+	if resp.Body == nil {
+		return nil, errors.New("response body is nil")
+	}
+
+	// Чтение тела ответа
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
@@ -138,8 +148,8 @@ func (b Bitrix) CrmDealAdd(fields map[string]interface{}) (map[string]interface{
 	var result map[string]interface{}
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		fmt.Println("Error:", err)
 		return nil, err
 	}
+
 	return result, nil
 }
