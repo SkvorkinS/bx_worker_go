@@ -153,7 +153,7 @@ func (b Bitrix) CrmDealAdd(fields map[string]interface{}) (map[string]interface{
 	return result, nil
 }
 
-func (b Bitrix) CrmStageHistoryList(entityTypeId int, filter map[string]interface{}, _select map[string]interface{}) (map[string]interface{}, error) {
+func (b Bitrix) CrmStageHistoryList(entityTypeId int, filter map[string]interface{}, _select []string) (map[string]interface{}, error) {
 
 	url := fmt.Sprintf("%s/crm.stagehistory.list", b.Webhook)
 
