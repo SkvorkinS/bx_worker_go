@@ -85,6 +85,10 @@ func (b Bitrix) CrmDealUpdate(id string, fields map[string]interface{}) (map[str
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
@@ -130,6 +134,59 @@ func (b Bitrix) CrmDealAdd(fields map[string]interface{}) (map[string]interface{
 	// Отправка запроса
 	client := &http.Client{}
 	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result map[string]interface{}
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return nil, err
+	}
+	return result, nil
+}
+
+func (b Bitrix) CrmStageHistoryList(entityTypeId int, filter map[string]interface{}, _select map[string]interface{}) (map[string]interface{}, error) {
+
+	url := fmt.Sprintf("%s/crm.stagehistory.list", b.Webhook)
+
+	// Данные для запроса
+
+	data := map[string]interface{}{
+		"entityTypeId": entityTypeId,
+		"order":        map[string]string{"ID": "ASC"},
+		"filter":       filter,
+		"select":       _select,
+	}
+
+	// Преобразование данных в JSON
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+
+	// Создание запроса
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, err
+	}
+
+	// Установка заголовков
+	req.Header.Set("Content-Type", "application/json")
+
+	// Отправка запроса
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
