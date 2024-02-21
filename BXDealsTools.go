@@ -153,7 +153,7 @@ func (b Bitrix) CrmDealAdd(fields map[string]interface{}) (map[string]interface{
 	return result, nil
 }
 
-func (b Bitrix) CrmStageHistoryList(entityTypeId int, filter map[string]interface{}, _select []string) (map[string]interface{}, error) {
+func (b Bitrix) CrmStageHistoryList(entityTypeId int, filter map[string]interface{}, select_fields []string) (map[string]interface{}, error) {
 
 	url := fmt.Sprintf("%s/crm.stagehistory.list", b.Webhook)
 
@@ -163,7 +163,7 @@ func (b Bitrix) CrmStageHistoryList(entityTypeId int, filter map[string]interfac
 		"entityTypeId": entityTypeId,
 		"order":        map[string]string{"ID": "ASC"},
 		"filter":       filter,
-		"select":       _select,
+		"select":       select_fields,
 	}
 
 	// Преобразование данных в JSON
