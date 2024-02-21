@@ -153,7 +153,7 @@ func (b Bitrix) CrmDealAdd(fields map[string]interface{}) (map[string]interface{
 	return result, nil
 }
 
-func (b Bitrix) CrmStageHistoryList(entityTypeId int, filter map[string]interface{}, select_fields []string) (map[string]interface{}, error) {
+func (b Bitrix) CrmStageHistoryList(entityTypeId int, filter map[string]interface{}, select_fields []string) (CrmDealHistoryResponse, error) {
 
 	url := fmt.Sprintf("%s/crm.stagehistory.list", b.Webhook)
 
@@ -169,13 +169,13 @@ func (b Bitrix) CrmStageHistoryList(entityTypeId int, filter map[string]interfac
 	// Преобразование данных в JSON
 	jsonData, err := json.Marshal(data)
 	if err != nil {
-		return nil, err
+		return CrmDealHistoryResponse{}, err
 	}
 
 	// Создание запроса
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
 	if err != nil {
-		return nil, err
+		return CrmDealHistoryResponse{}, err
 	}
 
 	// Установка заголовков
@@ -185,19 +185,20 @@ func (b Bitrix) CrmStageHistoryList(entityTypeId int, filter map[string]interfac
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return CrmDealHistoryResponse{}, err
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return CrmDealHistoryResponse{}, err
 	}
 
-	var result map[string]interface{}
+	var result CrmDealHistoryResponse
+
 	err = json.Unmarshal(body, &result)
 	if err != nil {
 		fmt.Println("Error:", err)
-		return nil, err
+		return CrmDealHistoryResponse{}, err
 	}
 	return result, nil
 }
